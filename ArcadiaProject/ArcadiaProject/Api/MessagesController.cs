@@ -59,5 +59,20 @@ namespace ArcadiaProject.Api
 
             return Ok(message);
         }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            if (!_context.Messages.Any(m => m.Id == id))
+            {
+                return NotFound();
+            }
+
+            var message = _context.Messages.Where(m => m.Id == id).Single();
+            message.IsDeleted = true;
+            _context.Update(message);
+            _context.SaveChanges();
+            return Ok(message);
+        }
     }
 }

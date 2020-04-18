@@ -44,5 +44,20 @@ namespace ArcadiaProject.Api
             _context.SaveChanges();
             return Ok();
         }
+
+        [HttpPost]
+        public IActionResult Post([FromForm] string value)
+        {
+            var message = new Messages
+            {
+                Date = DateTime.Now,
+                Message = value
+            };
+
+            _context.Messages.Add(message);
+            _context.SaveChanges();
+
+            return Ok(message);
+        }
     }
 }

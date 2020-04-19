@@ -55,13 +55,39 @@ namespace ArcadiaProject.Controllers
             }
         }
 
-        public ActionResult Delete(int id)
+        public ActionResult Remove(int id)
         {
             var message = _context.Messages.Where(m => m.Id == id).Single();
             _context.Messages.Remove(message);
             _context.SaveChanges();
 
             return RedirectToAction(nameof(ListMessages));
+        }
+        public ActionResult Edit(int id)
+        {
+            var result = _context.Messages.Where(m => m.Id == id).Single();
+            return View(result);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int id, IFormCollection data)
+        {
+            try
+            {
+                var message = _context.Messages.Where(m => m.Id == id).Single();
+
+                message.Message = data["Message"];
+                message.Date = DateTime.Now;
+
+                _context.Messages.Update(message);
+                _context.SaveChanges();
+
+                return RedirectToAction(nameof(ListMessages));
+            }
+            catch
+            {
+                return View();
+            }
         }
     }
 }
